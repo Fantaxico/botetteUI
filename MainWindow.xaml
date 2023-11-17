@@ -1,0 +1,56 @@
+﻿<Window x:Class="BotetteUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BotetteUI"
+        mc:Ignorable="d"
+        Title="BotetteUI" Height="330" Width="550">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TabControl>
+            <TabItem Header="Game">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="bttn_start" Content="START" HorizontalAlignment="Left" Margin="32,208,0,0" VerticalAlignment="Top" Height="35" Width="105" Click="bttn_start_Click"/>
+                    <Button Name="bttn_add" Content="Add" HorizontalAlignment="Left" Margin="482,47,0,0" VerticalAlignment="Top" RenderTransformOrigin="8.303,-12.273" Height="22" Width="36" Click="bttn_add_Click"/>
+                    <Button Name="bttn_delete_selected" Content="Clear Selected" HorizontalAlignment="Left" Margin="342,223,0,0" VerticalAlignment="Top" Width="106" Click="bttn_delete_selected_Click"/>
+                    <Button Name="bttn_delete_all" Content="Clear All" HorizontalAlignment="Left" Margin="453,223,0,0" VerticalAlignment="Top" Width="64" RenderTransformOrigin="4.13,1.405" Click="bttn_delete_all_Click"/>
+                    <CheckBox Name="cb_catch" IsChecked="False" Content="Catch Pokemon if radar pops or is in hunt list" HorizontalAlignment="Left" Margin="29,58,0,0" VerticalAlignment="Top" Unchecked="cb_catch_Change" Checked="cb_catch_Change"/>
+                    <CheckBox Name="cb_run" IsChecked="False" Content="Run instead of fighting" HorizontalAlignment="Left" Margin="50,85,0,0" VerticalAlignment="Top" Unchecked="cb_run_Change" Checked="cb_run_Change"/>
+                    <CheckBox Name="cb_debug" IsChecked="False" Content="Debug Mode" HorizontalAlignment="Left" Margin="32,178,0,0" VerticalAlignment="Top" Unchecked="cb_debug_Change" Checked="cb_debug_Change"/>
+                    <ComboBox Name="cbx_moves" HorizontalAlignment="Left" Margin="112,20,0,0" VerticalAlignment="Top" Width="104" SelectionChanged="cbx_moves_SelectionChanged"/>
+                    <Label Content="Move to use:" HorizontalAlignment="Left" Margin="29,18,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="txt_filter" Margin="380,20,0,0" Width="137" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                 TextChanged="txt_filter_TextChanged" Height="22"/>
+                    <ComboBox x:Name="cbx_mons" Margin="342,47,0,0" Width="134" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+
+                    <ListView Name="lv_hunts" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="342,79,10,64">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Width="170"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Label Content="Filter:" HorizontalAlignment="Left" Margin="335,16,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.928,0.425"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Settings">
+                <StackPanel>
+                    <Label>Working Directory:</Label>
+                    <TextBox IsReadOnly="True" Name="txt_working_directory" TextWrapping="Wrap" Text="Choose a directory from your drive.." Width="Auto" MouseDoubleClick="txt_working_directory_Click"/>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

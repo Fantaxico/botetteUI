@@ -1,0 +1,44 @@
+# Visual Studio generierte Dateien und Ordner
+.vscode/
+.vs/
+bin/
+obj/
+
+# Benutzer-spezifische Dateien
+*.suo
+*.user
+*.sln.docstates
+
+# NuGet-Pakete
+/packages/
+
+# Benutzeroptionen
+*.suo
+*.user
+*.userosscache
+
+# Testergebnisse
+TestResults/
+
+# Build-Verzeichnisse
+[Dd]ebug/
+[Rr]elease/
+x64/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio Code-Projektordner
+.vscode/
+
+# Windows-Verzeichnisse
+Thumbs.db
+Desktop.ini
+
+# Mac-Verzeichnisse
+.DS_Store
+
+# Benutzerdefinierte Ordner und Dateien, die Sie ausschließen möchten (fügen Sie sie hier hinzu)
