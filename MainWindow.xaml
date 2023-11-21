@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BotetteUI"
         mc:Ignorable="d"
-        Title="BotetteUI" Height="350" Width="700">
+        Title="BotetteUI" Height="380" Width="700">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -31,9 +31,9 @@
                     <Button Name="bttn_add" Content="Add" HorizontalAlignment="Left" Margin="613,44,0,0" VerticalAlignment="Top" RenderTransformOrigin="8.303,-12.273" Height="22" Width="36" Click="bttn_add_Click"/>
                     <Label Content="Priority Ball:" HorizontalAlignment="Left" Margin="390,72,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.928,0.425"/>
                     <ComboBox x:Name="cbx_ball" Margin="468,72,0,0" Width="134" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                    <Button Name="bttn_delete_selected" Content="Clear Selected" HorizontalAlignment="Left" Margin="390,254,0,0" VerticalAlignment="Top" Width="177" Click="bttn_delete_selected_Click"/>
-                    <Button Name="bttn_delete_all" Content="Clear All" HorizontalAlignment="Left" Margin="585,254,0,0" VerticalAlignment="Top" Width="64" RenderTransformOrigin="4.13,1.405" Click="bttn_delete_all_Click"/>
-                    <ListView Name="lv_hunts" d:ItemsSource="{d:SampleData ItemCount=2}" Margin="390,100,26,42">
+                    <Button Name="bttn_delete_selected" Content="Clear Selected" HorizontalAlignment="Left" Margin="390,269,0,0" VerticalAlignment="Top" Width="177" Click="bttn_delete_selected_Click"/>
+                    <Button Name="bttn_delete_all" Content="Clear All" HorizontalAlignment="Left" Margin="585,269,0,0" VerticalAlignment="Top" Width="64" RenderTransformOrigin="4.13,1.405" Click="bttn_delete_all_Click"/>
+                    <ListView Name="lv_hunts" d:ItemsSource="{d:SampleData ItemCount=2}" Margin="390,114,26,67">
                         <ListView.View>
                             <GridView>
                                 <!-- <GridViewColumn Header="Name" Width="180" DisplayMemberBinding="{Binding Name}" />-->
@@ -64,20 +64,26 @@
                     <ComboBox Name="cbx_moves" HorizontalAlignment="Left" Margin="112,20,0,0" VerticalAlignment="Top" Width="133" SelectionChanged="cbx_moves_SelectionChanged"/>
 
                     <!-- Checkboxes -->
-                    <CheckBox Name="cb_catch" IsChecked="False" Content="Enable hunting mode" ToolTip="Tries to catch Pokemon in the target list or on blaze radar activation" HorizontalAlignment="Left" Margin="30,111,0,0" VerticalAlignment="Top" Unchecked="cb_catch_Change" Checked="cb_catch_Change"/>
-                    <CheckBox Name="cb_run" IsChecked="False" Content="Flee instead of fighting" ToolTip="Flees from encounters instead of fighting them (might be faster)" HorizontalAlignment="Left" Margin="51,138,0,0" VerticalAlignment="Top" Unchecked="cb_run_Change" Checked="cb_run_Change"/>
-                    <CheckBox Name="cb_debug" IsChecked="False" Content="Debug Mode" HorizontalAlignment="Left" Margin="32,187,0,0" VerticalAlignment="Top" Unchecked="cb_debug_Change" Checked="cb_debug_Change"/>
-                    <CheckBox Name="cb_invert" IsChecked="False" Content="Invert running directions" ToolTip="Inverts the current selected directions (Left/Right -> Right/Left)" HorizontalAlignment="Left" Margin="30,83,0,0" VerticalAlignment="Top" Unchecked="cb_invert_Change" Checked="cb_invert_Change"/>
+                    <CheckBox Name="cb_catch" IsChecked="False" Content="Enable hunting mode" ToolTip="Tries to catch Pokemon in the target list or on blaze radar activation" HorizontalAlignment="Left" Margin="34,159,0,0" VerticalAlignment="Top" Unchecked="cb_catch_Change" Checked="cb_catch_Change"/>
+                    <CheckBox Name="cb_run" IsChecked="False" Content="Flee instead of fighting" ToolTip="Flees from encounters instead of fighting them (might be faster)" HorizontalAlignment="Left" Margin="34,182,0,0" VerticalAlignment="Top" Unchecked="cb_run_Change" Checked="cb_run_Change"/>
+                    <CheckBox Name="cb_debug" IsChecked="False" Content="Debug Mode" HorizontalAlignment="Left" Margin="34,227,0,0" VerticalAlignment="Top" Unchecked="cb_debug_Change" Checked="cb_debug_Change"/>
+
+                    <!-- Running -->
+                    <Slider Name="sl_randomness" Minimum="1" Maximum="5" Value="3" SmallChange="1" ToolTip="10%-50% chance to skip the next step (Anti sus)" IsSnapToTickEnabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119" Margin="156,81,0,0" ValueChanged="sl_randomness_ValueChanged" />
+                    <CheckBox Name="cb_invert" IsChecked="False" Content="Invert running direction" ToolTip="Inverts the current selected directions (Left/Right -> Right/Left)" HorizontalAlignment="Left" Margin="34,125,0,0" VerticalAlignment="Top" Unchecked="cb_invert_Change" Checked="cb_invert_Change"/>
                     <ComboBox Name="cbx_run_directions" SelectedIndex="0" HorizontalAlignment="Left" Margin="141,50,0,0" VerticalAlignment="Top" Width="104" SelectionChanged="cbx_run_directions_SelectionChanged">
                         <ComboBoxItem Content="Left/Right" />
                         <ComboBoxItem Content="Up/Down" />
                     </ComboBox>
 
                     <!-- Start -->
-                    <TextBlock Name="txt_game_running" Foreground="Red" HorizontalAlignment="Left" Margin="32,251,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
-                    <Button Name="bttn_start" Content="START" HorizontalAlignment="Left" Margin="32,212,0,0" VerticalAlignment="Top" Height="34" Width="105" Click="bttn_start_Click"/>
-                    <Button Name="bttn_game_start" Content="START GAME" HorizontalAlignment="Left" Margin="32,212,0,0" VerticalAlignment="Top" Height="34" Width="105" Click="bttn_game_start_Click"/>
+                    <TextBlock Name="txt_game_running" FontWeight="Bold" Foreground="Red" HorizontalAlignment="Left" Margin="34,291,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+                    <Button Name="bttn_start" Content="START" HorizontalAlignment="Left" Margin="34,252,0,0" VerticalAlignment="Top" Height="34" Width="105" Click="bttn_start_Click"/>
+                    <Button Name="bttn_game_start" Content="START GAME" HorizontalAlignment="Left" Margin="34,252,0,0" VerticalAlignment="Top" Height="34" Width="105" Click="bttn_game_start_Click"/>
                     <Label Content="Running direction:" HorizontalAlignment="Left" Margin="26,48,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Running randomness:" ToolTip="10%-50% chance to skip the next step (Anti sus)" HorizontalAlignment="Left" Margin="26,76,0,0" VerticalAlignment="Top"/>
+                    <Label Content="1" HorizontalAlignment="Left" Margin="155,94,0,0" VerticalAlignment="Top"/>
+                    <Label Content="5" HorizontalAlignment="Left" Margin="259,94,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Settings">

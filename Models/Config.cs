@@ -13,33 +13,36 @@ namespace BotetteUI.Models
     public class Config : Jsonable<Config>
     {
         public List<Target> Targets { get; set; }
-        public string Move { get; set; }
+        public string MoveToUse { get; set; }
         public string RunningDirection { get; set; }
-        public bool InvertRunning { get; set; }
-        public bool Hunt { get; set; }
-        public bool RunFromFights { get; set; }
+        public bool RunningInvert { get; set; }
+        public int RunningRandomness { get; set; }
+        public bool HuntingMode { get; set; }
+        public bool FleeFromFights { get; set; }
         public bool Debug { get; set; }
 
         [JsonConstructor]
-        public Config(List<Target> targets, string move, string runningDirection, bool invertRunning, bool hunt, bool runFromFights, bool debug)
+        public Config(List<Target> targets, string move, string runningDirection, bool invertRunning, int runningRandomness, bool hunt, bool fleeFromFights, bool debug)
         {
             Targets = targets;
-            Move = move;
+            MoveToUse = move;
             RunningDirection = runningDirection;
-            InvertRunning = invertRunning;
-            Hunt = hunt;
-            RunFromFights = runFromFights;
+            RunningInvert = invertRunning;
+            RunningRandomness = runningRandomness;
+            HuntingMode = hunt;
+            FleeFromFights = fleeFromFights;
             Debug = debug;
         }
 
         public Config()
         {
             Targets = new List<Target>();
-            Move = string.Empty;
+            MoveToUse = string.Empty;
             RunningDirection = "Left/Right";
-            InvertRunning = false;
-            Hunt = true;
-            RunFromFights = false;
+            RunningInvert = false;
+            RunningRandomness = 3;
+            HuntingMode = true;
+            FleeFromFights = false;
             Debug = false;
         }
     }

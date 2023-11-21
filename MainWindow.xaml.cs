@@ -49,10 +49,10 @@ namespace BotetteUI
         public void InitializeUI()
         {
             /* Set Checkboxes */
-            cb_catch.IsChecked = config.Hunt;
-            cb_run.IsChecked = config.RunFromFights;
+            cb_catch.IsChecked = config.HuntingMode;
+            cb_run.IsChecked = config.FleeFromFights;
             cb_debug.IsChecked = config.Debug;
-            cb_invert.IsChecked = config.InvertRunning;
+            cb_invert.IsChecked = config.RunningInvert;
 
             /* Set Textboxes */
             txt_working_directory.Text = settings.WorkingDirectory;
@@ -62,7 +62,7 @@ namespace BotetteUI
             data.Pokeballs.ForEach(ball => cbx_ball.Items.Add(ball.Name));
             cbx_mons.ItemsSource = data.Pokemon;
 
-            cbx_moves.SelectedItem = config.Move;
+            cbx_moves.SelectedItem = config.MoveToUse;
             data.Moves.ForEach(move => cbx_moves.Items.Add(move));
 
             config.Targets.ForEach(target => lv_hunts.Items.Add(target));
@@ -123,7 +123,7 @@ namespace BotetteUI
             else
             {
                 string selectedMove = selectedItem.ToString()!;
-                config.Move = selectedMove;
+                config.MoveToUse = selectedMove;
                 config = Config.Write(config, App_Helper.ConfigFilePath);
             }
         }
@@ -145,12 +145,12 @@ namespace BotetteUI
 
         private void cb_run_Change(object sender, RoutedEventArgs e)
         {
-            config.RunFromFights = cb_run.IsChecked!.Value;
+            config.FleeFromFights = cb_run.IsChecked!.Value;
             config = Config.Write(config, App_Helper.ConfigFilePath);
         }
         private void cb_invert_Change(object sender, RoutedEventArgs e)
         {
-            config.InvertRunning = cb_invert.IsChecked!.Value;
+            config.RunningInvert = cb_invert.IsChecked!.Value;
             config = Config.Write(config, App_Helper.ConfigFilePath);
         }
 
@@ -162,7 +162,7 @@ namespace BotetteUI
 
         private void cb_catch_Change(object sender, RoutedEventArgs e)
         {
-            config.Hunt = cb_catch.IsChecked!.Value;
+            config.HuntingMode = cb_catch.IsChecked!.Value;
             config = Config.Write(config, App_Helper.ConfigFilePath);
         }
 
@@ -259,6 +259,15 @@ namespace BotetteUI
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
+        }
+
+        private void sl_randomness_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (config != null)
+            {
+                config.RunningRandomness = (int)sl_randomness.Value;
+                config = Config.Write(config, App_Helper.ConfigFilePath);
+            }
         }
     }
 }
