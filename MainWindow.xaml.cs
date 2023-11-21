@@ -43,7 +43,7 @@ namespace BotetteUI
 
             Settings settings = Settings.Read(App_Helper.SettingsFilePath);
             if (!App_Helper.DataFileExists) Data.Write(new Data(), App_Helper.DataFilePath);
-            if (!App_Helper.ConfigFileExists) Config.Write(new Config(settings.WorkingDirectory), App_Helper.ConfigFilePath);
+            if (!App_Helper.ConfigFileExists) Config.Write(new Config(), App_Helper.ConfigFilePath);
         }
 
         public void InitializeUI()
@@ -52,6 +52,7 @@ namespace BotetteUI
             cb_catch.IsChecked = config.Hunt;
             cb_run.IsChecked = config.RunFromFights;
             cb_debug.IsChecked = config.Debug;
+            cb_invert.IsChecked = config.InvertRunning;
 
             /* Set Textboxes */
             txt_working_directory.Text = settings.WorkingDirectory;
@@ -118,7 +119,7 @@ namespace BotetteUI
         private void cbx_moves_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             object? selectedItem = cbx_moves.SelectedItem;
-            if (cbx_moves.SelectedItem == null) Com_Helper.Error("Non selected");
+            if (selectedItem == null) Com_Helper.Error("Non selected");
             else
             {
                 string selectedMove = selectedItem.ToString()!;
@@ -127,9 +128,29 @@ namespace BotetteUI
             }
         }
 
+        private void cbx_run_directions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            object? selectedItem = cbx_run_directions.SelectedItem;
+            if (selectedItem == null) Com_Helper.Error("Non selected");
+            else
+            {
+                string selectedDirection = ((ComboBoxItem)selectedItem).Content.ToString()!;
+                if(config != null)
+                {
+                    config.RunningDirection = selectedDirection;
+                    config = Config.Write(config, App_Helper.ConfigFilePath);
+                }
+            }
+        }
+
         private void cb_run_Change(object sender, RoutedEventArgs e)
         {
             config.RunFromFights = cb_run.IsChecked!.Value;
+            config = Config.Write(config, App_Helper.ConfigFilePath);
+        }
+        private void cb_invert_Change(object sender, RoutedEventArgs e)
+        {
+            config.InvertRunning = cb_invert.IsChecked!.Value;
             config = Config.Write(config, App_Helper.ConfigFilePath);
         }
 
