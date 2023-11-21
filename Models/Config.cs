@@ -12,14 +12,14 @@ namespace BotetteUI.Models
 {
     public class Config : Jsonable<Config>
     {
-        public List<string> Targets { get; set; }
+        public List<Target> Targets { get; set; }
         public string Move { get; set; }
         public bool Hunt { get; set; }
         public bool RunFromFights { get; set; }
         public bool Debug { get; set; }
 
         [JsonConstructor]
-        public Config(List<string> targets, string move, bool hunt, bool runFromFights, bool debug)
+        public Config(List<Target> targets, string move, bool hunt, bool runFromFights, bool debug)
         {
             Targets = targets;
             Move = move;
@@ -30,7 +30,7 @@ namespace BotetteUI.Models
 
         public Config(string wd)
         {
-            Targets = new List<string>();
+            Targets = new List<Target>();
             Move = string.Empty;
             Hunt = true;
             RunFromFights = false;

@@ -5,17 +5,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Timers;
+using System.Threading.Tasks;
 
 namespace BotetteUI
 {
@@ -28,30 +22,48 @@ namespace BotetteUI
         public MainWindow()
         {
             InitializeComponent();
-            InitApplication();
+            InitializeFiles();
+            data = Data.Read(App_Helper.DataFilePath);
+            config = Config.Read(App_Helper.ConfigFilePath);
+            settings = Settings.Read(App_Helper.SettingsFilePath);
+            InitializeUI();
+            IsPBORunning();
         }
 
-        public void InitApplication()
+        public void InitializeFiles()
         {
-            if (!App_Helper.SettingsFileExists) {
+            if (!App_Helper.SettingsFileExists)
+            {
+                MessageBox.Show("Please show the path to botette", "Start", MessageBoxButton.OK);
                 Com_Helper.OpenDirectoryExplorer((path) =>
                 {
-                    MessageBox.Show("Please show the path to botette", "Start", MessageBoxButton.OK);
                     Settings.Write(new Settings(path), App_Helper.SettingsFilePath);
                 });
             }
-            settings = Settings.Read(App_Helper.SettingsFilePath);
+
+            Settings settings = Settings.Read(App_Helper.SettingsFilePath);
             if (!App_Helper.DataFileExists) Data.Write(new Data(), App_Helper.DataFilePath);
             if (!App_Helper.ConfigFileExists) Config.Write(new Config(settings.WorkingDirectory), App_Helper.ConfigFilePath);
-            data = Data.Read(App_Helper.DataFilePath);
-            config = Config.Read(App_Helper.ConfigFilePath);
+        }
+
+        public void InitializeUI()
+        {
+            /* Set Checkboxes */
             cb_catch.IsChecked = config.Hunt;
             cb_run.IsChecked = config.RunFromFights;
             cb_debug.IsChecked = config.Debug;
+
+            /* Set Textboxes */
             txt_working_directory.Text = settings.WorkingDirectory;
+            txt_pbo_path.Text = settings.PBOPath;
+
+            /* Set data */
+            data.Pokeballs.ForEach(ball => cbx_ball.Items.Add(ball.Name));
             cbx_mons.ItemsSource = data.Pokemon;
-            data.Moves.ForEach(move => cbx_moves.Items.Add(move));
+
             cbx_moves.SelectedItem = config.Move;
+            data.Moves.ForEach(move => cbx_moves.Items.Add(move));
+
             config.Targets.ForEach(target => lv_hunts.Items.Add(target));
         }
 
@@ -64,14 +76,35 @@ namespace BotetteUI
 
         private void bttn_add_Click(object sender, RoutedEventArgs e)
         {
-            RefreshPokemon(add: true, cbx_mons.SelectedItem);
+            if (cbx_mons.SelectedItem != null)
+            {
+                string selectedPkm = cbx_mons.SelectedItem.ToString()!;
+                Pokeball selectedBall =
+                    cbx_ball.SelectedItem == null ?
+                    data.Pokeballs[(int)POKEBALLS.ULTRA_BALL] :
+                    data.Pokeballs.FirstOrDefault(ball => ball.Name == cbx_ball.SelectedItem.ToString());
+
+                Target target = new Target(selectedPkm, selectedBall);
+                lv_hunts.Items.Add(target);
+                config.Targets.Add(target);
+                config = Config.Write(config, App_Helper.ConfigFilePath);
+            }
+            else Com_Helper.Error("No pokemon selected");
+
         }
 
         private void bttn_delete_selected_Click(object sender, RoutedEventArgs e)
         {
-            RefreshPokemon(add: false, lv_hunts.SelectedItem);
+            if (lv_hunts.SelectedItem != null)
+            {
+                Target selectedItem = (Target)lv_hunts.SelectedItem;
+                // config.Targets.Remove(selectedItem); BIG ?
+                config.Targets.RemoveAll(target => target.Name == selectedItem.Name);
+                lv_hunts.Items.Remove(selectedItem);
+                config = Config.Write(config, App_Helper.ConfigFilePath);
+            }
+            else Com_Helper.Error("No pokemon selected");
         }
-
         private void bttn_delete_all_Click(object sender, RoutedEventArgs e)
         {
             Com_Helper.YesNo("Really flush the list ?", "Caution", () =>
@@ -90,26 +123,6 @@ namespace BotetteUI
             {
                 string selectedMove = selectedItem.ToString()!;
                 config.Move = selectedMove;
-                config = Config.Write(config, App_Helper.ConfigFilePath);
-            }
-        }
-        public void RefreshPokemon(bool add, object obj)
-        {
-            object? selectedObj = obj;
-            if (selectedObj == null) Com_Helper.Error("Non selected");
-            else
-            {
-                string selectedItem = selectedObj.ToString()!;
-                if (add)
-                {
-                    lv_hunts.Items.Add(selectedItem);
-                    config.Targets.Add(selectedItem);
-                }
-                else
-                {
-                    lv_hunts.Items.Remove(selectedItem);
-                    config.Targets.Remove(selectedItem);
-                }
                 config = Config.Write(config, App_Helper.ConfigFilePath);
             }
         }
@@ -142,35 +155,89 @@ namespace BotetteUI
             });
         }
 
-        private void bttn_start_Click(object sender, RoutedEventArgs e)
+        private void txt_pbo_path_Click(object sender, RoutedEventArgs e)
         {
-            RunPythonScript();
+            Com_Helper.OpenFileExplorer("Open File","",(path) =>
+            {
+                txt_pbo_path.Text = path;
+                settings.PBOPath = path;
+                Settings.Write(settings, App_Helper.SettingsFilePath);
+            });
         }
 
-        private void RunPythonScript()
+        private void IsPBORunning()
         {
-            string scriptPath = @"C:\Users\Luke\Documents\Dev\Projekte\botette\main.py";
+            Timer processCheckTimer = new Timer();
+            processCheckTimer.Interval = 1000; // Check every 1 second (adjust as needed)
+            processCheckTimer.Elapsed += ProcessCheckTimerElapsed!;
+            processCheckTimer.Start();
+        }
 
-            using (Process process = new Process())
+        private bool IsProcessRunning(string processName)
+        {
+            // Check if the specified process is running
+            Process[] processes = Process.GetProcessesByName(processName);
+            return processes.Length > 0;
+        }
+
+        private void ProcessCheckTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            bool isJavaRunning = IsProcessRunning("java");
+            Dispatcher.Invoke(() =>
             {
-                process.StartInfo.FileName = "python.exe"; // or the path to your Python interpreter
-                process.StartInfo.Arguments = scriptPath;
-                process.StartInfo.UseShellExecute = true;
-                process.StartInfo.RedirectStandardOutput = false;
-                process.StartInfo.CreateNoWindow = false;
+                txt_game_running.Text = isJavaRunning ? "Game found" : "Game not running";
+                txt_game_running.Foreground = isJavaRunning ? Brushes.Green : Brushes.Red;
+                bttn_game_start.Visibility = isJavaRunning ? Visibility.Hidden : Visibility.Visible;
+                bttn_start.Visibility = isJavaRunning ? Visibility.Visible : Visibility.Hidden;
+            });
+        }
 
-                // Start the process
-                process.Start();
+        private void bttn_start_Click(object sender, RoutedEventArgs e)
+        {
+            Task.Run(() =>
+            {
+                RunProcess("python.exe", settings.WorkingDirectory + "/main.py", true);
+            });
+        }
 
-                // Read the output (if needed)
-                //string output = process.StandardOutput.ReadToEnd();
+        private void bttn_game_start_Click(object sender, RoutedEventArgs e)
+        {
+            Task.Run(() =>
+            {
+                RunProcess(settings.PBOPath);
+            });
+        }
 
-                // Wait for the process to exit
-                process.WaitForExit();
+        private void RunProcess(string filename, string args = "", bool useShell = true)
+        {
+            try
+            {
+                using (Process process = new Process())
+                {
+                    process.StartInfo.FileName = filename;
+                    process.StartInfo.Arguments = args;
+                    process.StartInfo.UseShellExecute = useShell;
+                    process.StartInfo.RedirectStandardOutput = false;
+                    process.StartInfo.CreateNoWindow = false;
 
-                // Optionally, do something with the output
-                //MessageBox.Show(output);
+                    // Start the process
+                    process.Start();
+
+                    // Read the output (if needed)
+                    //string output = process.StandardOutput.ReadToEnd();
+
+                    // Wait for the process to exit
+                    process.WaitForExit();
+
+                    // Optionally, do something with the output
+                    //MessageBox.Show(output);
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
         }
     }
 }

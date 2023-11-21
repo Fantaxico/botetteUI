@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BotetteUI"
         mc:Ignorable="d"
-        Title="BotetteUI" Height="330" Width="550">
+        Title="BotetteUI" Height="350" Width="700">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -22,33 +22,58 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Name="bttn_start" Content="START" HorizontalAlignment="Left" Margin="32,208,0,0" VerticalAlignment="Top" Height="35" Width="105" Click="bttn_start_Click"/>
-                    <Button Name="bttn_add" Content="Add" HorizontalAlignment="Left" Margin="482,47,0,0" VerticalAlignment="Top" RenderTransformOrigin="8.303,-12.273" Height="22" Width="36" Click="bttn_add_Click"/>
-                    <Button Name="bttn_delete_selected" Content="Clear Selected" HorizontalAlignment="Left" Margin="342,223,0,0" VerticalAlignment="Top" Width="106" Click="bttn_delete_selected_Click"/>
-                    <Button Name="bttn_delete_all" Content="Clear All" HorizontalAlignment="Left" Margin="453,223,0,0" VerticalAlignment="Top" Width="64" RenderTransformOrigin="4.13,1.405" Click="bttn_delete_all_Click"/>
+                    <Button Name="bttn_start" Content="START" HorizontalAlignment="Left" Margin="32,212,0,0" VerticalAlignment="Top" Height="34" Width="105" Click="bttn_start_Click"/>
+                    <Button Name="bttn_game_start" Content="START GAME" HorizontalAlignment="Left" Margin="32,212,0,0" VerticalAlignment="Top" Height="34" Width="105" Click="bttn_game_start_Click"/>
+                    <Button Name="bttn_add" Content="Add" HorizontalAlignment="Left" Margin="613,44,0,0" VerticalAlignment="Top" RenderTransformOrigin="8.303,-12.273" Height="22" Width="36" Click="bttn_add_Click"/>
+                    <Button Name="bttn_delete_selected" Content="Clear Selected" HorizontalAlignment="Left" Margin="390,254,0,0" VerticalAlignment="Top" Width="177" Click="bttn_delete_selected_Click"/>
+                    <Button Name="bttn_delete_all" Content="Clear All" HorizontalAlignment="Left" Margin="585,254,0,0" VerticalAlignment="Top" Width="64" RenderTransformOrigin="4.13,1.405" Click="bttn_delete_all_Click"/>
                     <CheckBox Name="cb_catch" IsChecked="False" Content="Catch Pokemon if radar pops or is in hunt list" HorizontalAlignment="Left" Margin="29,58,0,0" VerticalAlignment="Top" Unchecked="cb_catch_Change" Checked="cb_catch_Change"/>
                     <CheckBox Name="cb_run" IsChecked="False" Content="Run instead of fighting" HorizontalAlignment="Left" Margin="50,85,0,0" VerticalAlignment="Top" Unchecked="cb_run_Change" Checked="cb_run_Change"/>
                     <CheckBox Name="cb_debug" IsChecked="False" Content="Debug Mode" HorizontalAlignment="Left" Margin="32,178,0,0" VerticalAlignment="Top" Unchecked="cb_debug_Change" Checked="cb_debug_Change"/>
                     <ComboBox Name="cbx_moves" HorizontalAlignment="Left" Margin="112,20,0,0" VerticalAlignment="Top" Width="104" SelectionChanged="cbx_moves_SelectionChanged"/>
                     <Label Content="Move to use:" HorizontalAlignment="Left" Margin="29,18,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="txt_filter" Margin="380,20,0,0" Width="137" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                    <TextBox x:Name="txt_filter" Margin="468,15,0,0" Width="134" VerticalAlignment="Top" HorizontalAlignment="Left" 
                  TextChanged="txt_filter_TextChanged" Height="22"/>
-                    <ComboBox x:Name="cbx_mons" Margin="342,47,0,0" Width="134" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    <ComboBox x:Name="cbx_mons" Margin="468,44,0,0" Width="134" VerticalAlignment="Top" HorizontalAlignment="Left"/>
 
-                    <ListView Name="lv_hunts" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="342,79,10,64">
+                    <ListView Name="lv_hunts" d:ItemsSource="{d:SampleData ItemCount=2}" Margin="390,100,26,42">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Width="170"/>
+                                <!-- <GridViewColumn Header="Name" Width="180" DisplayMemberBinding="{Binding Name}" />-->
+                                <GridViewColumn Header="Name" Width="180">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Prio" Width="40">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="{Binding PriorityBall.ImagePath}" Width="20" Height="20" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <Label Content="Filter:" HorizontalAlignment="Left" Margin="335,16,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.928,0.425"/>
+                    <Label Content="Filter:" HorizontalAlignment="Left" Margin="424,13,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.928,0.425"/>
+                    <ComboBox x:Name="cbx_ball" Margin="468,72,0,0" Width="134" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    <Label Content="Pokemon:" HorizontalAlignment="Left" Margin="401,42,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.928,0.425"/>
+                    <Label Content="Priority Ball:" HorizontalAlignment="Left" Margin="390,72,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.928,0.425"/>
+                    <TextBlock Name="txt_game_running" Foreground="Red" HorizontalAlignment="Left" Margin="32,251,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Settings">
                 <StackPanel>
                     <Label>Working Directory:</Label>
                     <TextBox IsReadOnly="True" Name="txt_working_directory" TextWrapping="Wrap" Text="Choose a directory from your drive.." Width="Auto" MouseDoubleClick="txt_working_directory_Click"/>
+                    <Label>Path to PBO executable:</Label>
+                    <TextBox IsReadOnly="True" Name="txt_pbo_path" TextWrapping="Wrap" Text="Choose a file from your drive.." Width="Auto" MouseDoubleClick="txt_pbo_path_Click"/>
                 </StackPanel>
             </TabItem>
         </TabControl>

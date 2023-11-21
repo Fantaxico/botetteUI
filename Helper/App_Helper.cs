@@ -13,14 +13,19 @@ namespace BotetteUI.Helper
         public static string SettingsFilePath = "./settings.json";
         public static string DataFilePath = "./data.json";
         public static string ConfigFilePath = relativeDir("/config.json");
+
         public static bool SettingsFileExists => File.Exists(SettingsFilePath);
         public static bool DataFileExists => File.Exists(DataFilePath);
         public static bool ConfigFileExists => File.Exists(ConfigFilePath);
 
         private static string relativeDir(string path)
         {
-            Settings settings = Settings.Read(SettingsFilePath);
-            return settings.WorkingDirectory + path;
+            if (SettingsFileExists)
+            {
+                Settings settings = Settings.Read(SettingsFilePath);
+                return settings.WorkingDirectory + path;
+            }
+            return path;
         }
         public static bool IsNullOrEmpty<T>(T obj)
         {
