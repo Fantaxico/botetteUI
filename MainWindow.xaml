@@ -61,9 +61,9 @@
 
                     <!-- Move -->
                     <Label Content="Move to use:" HorizontalAlignment="Left" Margin="26,18,0,0" VerticalAlignment="Top"/>
-                    <ComboBox Name="cbx_moves" HorizontalAlignment="Left" Margin="112,20,0,0" VerticalAlignment="Top" Width="133" SelectionChanged="cbx_moves_SelectionChanged"/>
+                    <ComboBox Name="cbx_moves" ToolTip="Move 2 is next to 1 and move 4 is next to 3" HorizontalAlignment="Left" Margin="112,20,0,0" VerticalAlignment="Top" Width="39" SelectionChanged="cbx_moves_SelectionChanged"/>
 
-                    <!-- Checkboxes -->
+                        <!-- Checkboxes -->
                     <CheckBox Name="cb_catch" IsChecked="False" Content="Enable hunting mode" ToolTip="Tries to catch Pokemon in the target list or on blaze radar activation" HorizontalAlignment="Left" Margin="34,159,0,0" VerticalAlignment="Top" Unchecked="cb_catch_Change" Checked="cb_catch_Change"/>
                     <CheckBox Name="cb_run" IsChecked="False" Content="Flee instead of fighting" ToolTip="Flees from encounters instead of fighting them (might be faster)" HorizontalAlignment="Left" Margin="34,182,0,0" VerticalAlignment="Top" Unchecked="cb_run_Change" Checked="cb_run_Change"/>
                     <CheckBox Name="cb_debug" IsChecked="False" Content="Debug Mode" HorizontalAlignment="Left" Margin="34,227,0,0" VerticalAlignment="Top" Unchecked="cb_debug_Change" Checked="cb_debug_Change"/>
@@ -71,12 +71,9 @@
                     <!-- Running -->
                     <Slider Name="sl_randomness" Minimum="1" Maximum="5" Value="3" SmallChange="1" ToolTip="10%-50% chance to skip the next step (Anti sus)" IsSnapToTickEnabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119" Margin="156,81,0,0" ValueChanged="sl_randomness_ValueChanged" />
                     <CheckBox Name="cb_invert" IsChecked="False" Content="Invert running direction" ToolTip="Inverts the current selected directions (Left/Right -> Right/Left)" HorizontalAlignment="Left" Margin="34,125,0,0" VerticalAlignment="Top" Unchecked="cb_invert_Change" Checked="cb_invert_Change"/>
-                    <ComboBox Name="cbx_run_directions" SelectedIndex="0" HorizontalAlignment="Left" Margin="141,50,0,0" VerticalAlignment="Top" Width="104" SelectionChanged="cbx_run_directions_SelectionChanged">
-                        <ComboBoxItem Content="Left/Right" />
-                        <ComboBoxItem Content="Up/Down" />
-                    </ComboBox>
+                    <ComboBox Name="cbx_run_directions" HorizontalAlignment="Left" Margin="141,50,0,0" VerticalAlignment="Top" Width="104" SelectionChanged="cbx_run_directions_SelectionChanged"/>
 
-                    <!-- Start -->
+                        <!-- Start -->
                     <TextBlock Name="txt_game_running" FontWeight="Bold" Foreground="Red" HorizontalAlignment="Left" Margin="34,291,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
                     <Button Name="bttn_start" Content="START" HorizontalAlignment="Left" Margin="34,252,0,0" VerticalAlignment="Top" Height="34" Width="105" Click="bttn_start_Click"/>
                     <Button Name="bttn_game_start" Content="START GAME" HorizontalAlignment="Left" Margin="34,252,0,0" VerticalAlignment="Top" Height="34" Width="105" Click="bttn_game_start_Click"/>

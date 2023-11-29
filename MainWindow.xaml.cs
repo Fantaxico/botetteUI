@@ -58,12 +58,17 @@ namespace BotetteUI
             txt_working_directory.Text = settings.WorkingDirectory;
             txt_pbo_path.Text = settings.PBOPath;
 
+            /* Set Sliders */
+            sl_randomness.Value = config.RunningRandomness;
+
             /* Set data */
             data.Pokeballs.ForEach(ball => cbx_ball.Items.Add(ball.Name));
             cbx_mons.ItemsSource = data.Pokemon;
 
             cbx_moves.SelectedItem = config.MoveToUse;
+            cbx_run_directions.SelectedItem = config.RunningDirection;
             data.Moves.ForEach(move => cbx_moves.Items.Add(move));
+            data.Directions.ForEach(direction => cbx_run_directions.Items.Add(direction));
 
             config.Targets.ForEach(target => lv_hunts.Items.Add(target));
         }
@@ -134,9 +139,9 @@ namespace BotetteUI
             if (selectedItem == null) Com_Helper.Error("Non selected");
             else
             {
-                string selectedDirection = ((ComboBoxItem)selectedItem).Content.ToString()!;
                 if(config != null)
                 {
+                    string selectedDirection = selectedItem.ToString()!;
                     config.RunningDirection = selectedDirection;
                     config = Config.Write(config, App_Helper.ConfigFilePath);
                 }

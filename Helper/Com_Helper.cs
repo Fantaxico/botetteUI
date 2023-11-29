@@ -31,6 +31,11 @@ namespace BotetteUI.Helper
             else if (result == MessageBoxResult.No && noAction != null) noAction();
         }
 
+        public static void Log(string text)
+        {
+            MessageBox.Show($"{text}", "Log", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
+        }
+
         public static string? SaveFileExplorer(string title = "Save File", string filter = "", Action<string>? action = null)
         {
             SaveFileDialog dialog = new SaveFileDialog();
