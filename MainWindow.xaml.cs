@@ -1,15 +1,14 @@
 ﻿using BotetteUI.Helper;
 using BotetteUI.Models;
+using BotetteUI.Models.Stucts;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Timers;
-using System.Threading.Tasks;
 
 namespace BotetteUI
 {
@@ -23,27 +22,42 @@ namespace BotetteUI
         {
             InitializeComponent();
             InitializeFiles();
-            data = Data.Read(App_Helper.DataFilePath);
-            config = Config.Read(App_Helper.ConfigFilePath);
             settings = Settings.Read(App_Helper.SettingsFilePath);
-            InitializeUI();
-            IsPBORunning();
+            data = Data.Read(App_Helper.DataFilePath);
+            CheckStartup();
+        }
+
+        public void CheckStartup()
+        {
+            if(settings.FirstStartup == 1)
+            {
+                if (App_Helper.SettingsFileExists)
+                {
+                    MessageBox.Show("Booo! Welcome to Botette for PBO", "Welcome", MessageBoxButton.OK);
+                    MessageBox.Show("Please show me the path to the Botette script directory", "Show me", MessageBoxButton.OK);
+                    Com_Helper.OpenDirectoryExplorer((path) =>
+                    {
+                        settings.WorkingDirectory = path;
+                        settings.FirstStartup = 0;
+                        settings = Settings.Write(settings, App_Helper.SettingsFilePath);
+                        MessageBox.Show("Thank you! You may start the application again", "See ya", MessageBoxButton.OK);
+                        Application.Current.Shutdown();
+                    });
+                }
+            } 
+            else
+            {
+                if (!App_Helper.ConfigFileExists) Config.Write(new Config(), App_Helper.ConfigFilePath);
+                config = Config.Read(App_Helper.ConfigFilePath);
+                InitializeUI();
+                IsPBORunning();
+            }
         }
 
         public void InitializeFiles()
-        {
-            if (!App_Helper.SettingsFileExists)
-            {
-                MessageBox.Show("Please show the path to botette", "Start", MessageBoxButton.OK);
-                Com_Helper.OpenDirectoryExplorer((path) =>
-                {
-                    Settings.Write(new Settings(path), App_Helper.SettingsFilePath);
-                });
-            }
-
-            Settings settings = Settings.Read(App_Helper.SettingsFilePath);
+        {           
+            if (!App_Helper.SettingsFileExists) Settings.Write(new Settings(), App_Helper.SettingsFilePath);
             if (!App_Helper.DataFileExists) Data.Write(new Data(), App_Helper.DataFilePath);
-            if (!App_Helper.ConfigFileExists) Config.Write(new Config(), App_Helper.ConfigFilePath);
         }
 
         public void InitializeUI()
@@ -54,23 +68,35 @@ namespace BotetteUI
             cb_debug.IsChecked = config.Debug;
             cb_invert.IsChecked = config.RunningInvert;
 
+            /* Notifications */
+            cb_notify_anonym.IsChecked = config.UserNotifications.IsAnonymous;
+            cb_notify_blaze.IsChecked = config.UserNotifications.OnBlazeRadar;
+            cb_notify_offline.IsChecked = config.UserNotifications.OnDisconnect;
+            cb_notify_friend.IsChecked = config.UserNotifications.OnFriendRequest;
+            cb_notify_whisper.IsChecked = config.UserNotifications.OnWisperMessage;
+            cb_notify_admin.IsChecked = config.UserNotifications.OnAdminPin;
+            cb_notify_catch.IsChecked = config.UserNotifications.OnCatchAttempt;
+            cb_notify_ball.IsChecked = config.UserNotifications.OnBallCount;
+
             /* Set Textboxes */
             txt_working_directory.Text = settings.WorkingDirectory;
             txt_pbo_path.Text = settings.PBOPath;
+            txt_discord_userId.Text = config.DiscordUserId;
 
             /* Set Sliders */
             sl_randomness.Value = config.RunningRandomness;
+            sl_tick_chatter.Value = config.TickChatter;
+            sl_tick_watcher.Value = config.TickWatcher;
 
             /* Set data */
             data.Pokeballs.ForEach(ball => cbx_ball.Items.Add(ball.Name));
-            cbx_mons.ItemsSource = data.Pokemon;
-
-            cbx_moves.SelectedItem = config.MoveToUse;
-            cbx_run_directions.SelectedItem = config.RunningDirection;
             data.Moves.ForEach(move => cbx_moves.Items.Add(move));
             data.Directions.ForEach(direction => cbx_run_directions.Items.Add(direction));
-
             config.Targets.ForEach(target => lv_hunts.Items.Add(target));
+
+            cbx_mons.ItemsSource = data.Pokemon;
+            cbx_moves.SelectedItem = config.MoveToUse;
+            cbx_run_directions.SelectedItem = config.RunningDirection;
         }
 
         private void txt_filter_TextChanged(object sender, TextChangedEventArgs e)
@@ -96,7 +122,6 @@ namespace BotetteUI
                 config = Config.Write(config, App_Helper.ConfigFilePath);
             }
             else Com_Helper.Error("No pokemon selected");
-
         }
 
         private void bttn_delete_selected_Click(object sender, RoutedEventArgs e)
@@ -139,7 +164,7 @@ namespace BotetteUI
             if (selectedItem == null) Com_Helper.Error("Non selected");
             else
             {
-                if(config != null)
+                if (config != null)
                 {
                     string selectedDirection = selectedItem.ToString()!;
                     config.RunningDirection = selectedDirection;
@@ -171,6 +196,52 @@ namespace BotetteUI
             config = Config.Write(config, App_Helper.ConfigFilePath);
         }
 
+        private void cb_notify_anonym_Change(object sender, RoutedEventArgs e)
+        {
+            config.UserNotifications.IsAnonymous = cb_notify_anonym.IsChecked!.Value;
+            config = Config.Write(config, App_Helper.ConfigFilePath);
+        }
+
+        private void cb_notify_blaze_Change(object sender, RoutedEventArgs e)
+        {
+            config.UserNotifications.OnBlazeRadar = cb_notify_blaze.IsChecked!.Value;
+            config = Config.Write(config, App_Helper.ConfigFilePath);
+        }
+        private void cb_notify_offline_Change(object sender, RoutedEventArgs e)
+        {
+            config.UserNotifications.OnDisconnect = cb_notify_offline.IsChecked!.Value;
+            config = Config.Write(config, App_Helper.ConfigFilePath);
+        }
+
+        private void cb_notify_friend_Change(object sender, RoutedEventArgs e)
+        {
+            config.UserNotifications.OnFriendRequest = cb_notify_friend.IsChecked!.Value;
+            config = Config.Write(config, App_Helper.ConfigFilePath);
+        }
+
+        private void cb_notify_whisper_Change(object sender, RoutedEventArgs e)
+        {
+            config.UserNotifications.OnWisperMessage = cb_notify_whisper.IsChecked!.Value;
+            config = Config.Write(config, App_Helper.ConfigFilePath);
+        }
+        private void cb_notify_admin_Change(object sender, RoutedEventArgs e)
+        {
+            config.UserNotifications.OnAdminPin = cb_notify_admin.IsChecked!.Value;
+            config = Config.Write(config, App_Helper.ConfigFilePath);
+        }
+
+        private void cb_notify_catch_Change(object sender, RoutedEventArgs e)
+        {
+            config.UserNotifications.OnCatchAttempt = cb_notify_catch.IsChecked!.Value;
+            config = Config.Write(config, App_Helper.ConfigFilePath);
+        }
+
+        private void cb_notify_ball_Change(object sender, RoutedEventArgs e)
+        {
+            config.UserNotifications.OnBallCount = cb_notify_ball.IsChecked!.Value;
+            config = Config.Write(config, App_Helper.ConfigFilePath);
+        }
+
         private void txt_working_directory_Click(object sender, RoutedEventArgs e)
         {
             Com_Helper.OpenDirectoryExplorer((path) =>
@@ -183,7 +254,7 @@ namespace BotetteUI
 
         private void txt_pbo_path_Click(object sender, RoutedEventArgs e)
         {
-            Com_Helper.OpenFileExplorer("Open File","",(path) =>
+            Com_Helper.OpenFileExplorer("Open File", "", (path) =>
             {
                 txt_pbo_path.Text = path;
                 settings.PBOPath = path;
@@ -273,6 +344,45 @@ namespace BotetteUI
                 config.RunningRandomness = (int)sl_randomness.Value;
                 config = Config.Write(config, App_Helper.ConfigFilePath);
             }
+        }
+
+        private void sl_tick_chatter_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (config != null)
+            {
+                config.TickChatter = (int)sl_tick_chatter.Value;
+                config = Config.Write(config, App_Helper.ConfigFilePath);
+            }
+        }
+
+        private void sl_tick_watcher_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (config != null)
+            {
+                config.TickWatcher = (int)sl_tick_watcher.Value;
+                config = Config.Write(config, App_Helper.ConfigFilePath);
+            }
+        }
+
+        private void txt_discord_userId_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (config != null)
+            {
+                config.DiscordUserId = txt_discord_userId.Text;
+                config = Config.Write(config, App_Helper.ConfigFilePath);
+            }
+        }
+
+        private void bttn_join_discord_Click(object sender, RoutedEventArgs e)
+        {
+            string discordInviteLink = "https://discord.gg/vZEtyCnHtf";
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = discordInviteLink,
+                UseShellExecute = true
+            });
+
         }
     }
 }

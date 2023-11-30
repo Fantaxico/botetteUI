@@ -1,16 +1,11 @@
-﻿using BotetteUI.Helper;
-using BotetteUI.IO;
+﻿using BotetteUI.IO;
+using BotetteUI.Models.Stucts;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Xps;
 
 namespace BotetteUI.Models
 {
-    public class Data: Jsonable<Data>
+    public class Data : Jsonable<Data>
     {
         public List<string> Pokemon { get; set; }
         public List<string> Moves { get; set; }

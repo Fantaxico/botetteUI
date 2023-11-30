@@ -60,10 +60,10 @@
                     </ListView>
 
                     <!-- Move -->
-                    <Label Content="Move to use:" HorizontalAlignment="Left" Margin="26,18,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Move to use:" ToolTip="Move 2 is next to 1 and move 4 is next to 3" HorizontalAlignment="Left" Margin="26,18,0,0" VerticalAlignment="Top"/>
                     <ComboBox Name="cbx_moves" ToolTip="Move 2 is next to 1 and move 4 is next to 3" HorizontalAlignment="Left" Margin="112,20,0,0" VerticalAlignment="Top" Width="39" SelectionChanged="cbx_moves_SelectionChanged"/>
 
-                        <!-- Checkboxes -->
+                    <!-- Checkboxes -->
                     <CheckBox Name="cb_catch" IsChecked="False" Content="Enable hunting mode" ToolTip="Tries to catch Pokemon in the target list or on blaze radar activation" HorizontalAlignment="Left" Margin="34,159,0,0" VerticalAlignment="Top" Unchecked="cb_catch_Change" Checked="cb_catch_Change"/>
                     <CheckBox Name="cb_run" IsChecked="False" Content="Flee instead of fighting" ToolTip="Flees from encounters instead of fighting them (might be faster)" HorizontalAlignment="Left" Margin="34,182,0,0" VerticalAlignment="Top" Unchecked="cb_run_Change" Checked="cb_run_Change"/>
                     <CheckBox Name="cb_debug" IsChecked="False" Content="Debug Mode" HorizontalAlignment="Left" Margin="34,227,0,0" VerticalAlignment="Top" Unchecked="cb_debug_Change" Checked="cb_debug_Change"/>
@@ -73,7 +73,7 @@
                     <CheckBox Name="cb_invert" IsChecked="False" Content="Invert running direction" ToolTip="Inverts the current selected directions (Left/Right -> Right/Left)" HorizontalAlignment="Left" Margin="34,125,0,0" VerticalAlignment="Top" Unchecked="cb_invert_Change" Checked="cb_invert_Change"/>
                     <ComboBox Name="cbx_run_directions" HorizontalAlignment="Left" Margin="141,50,0,0" VerticalAlignment="Top" Width="104" SelectionChanged="cbx_run_directions_SelectionChanged"/>
 
-                        <!-- Start -->
+                    <!-- Start -->
                     <TextBlock Name="txt_game_running" FontWeight="Bold" Foreground="Red" HorizontalAlignment="Left" Margin="34,291,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
                     <Button Name="bttn_start" Content="START" HorizontalAlignment="Left" Margin="34,252,0,0" VerticalAlignment="Top" Height="34" Width="105" Click="bttn_start_Click"/>
                     <Button Name="bttn_game_start" Content="START GAME" HorizontalAlignment="Left" Margin="34,252,0,0" VerticalAlignment="Top" Height="34" Width="105" Click="bttn_game_start_Click"/>
@@ -84,12 +84,40 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Settings">
-                <StackPanel>
-                    <Label>Working Directory:</Label>
-                    <TextBox IsReadOnly="True" Name="txt_working_directory" TextWrapping="Wrap" Text="Choose a directory from your drive.." Width="Auto" MouseDoubleClick="txt_working_directory_Click"/>
-                    <Label>Path to PBO executable:</Label>
-                    <TextBox IsReadOnly="True" Name="txt_pbo_path" TextWrapping="Wrap" Text="Choose a file from your drive.." Width="Auto" MouseDoubleClick="txt_pbo_path_Click"/>
-                </StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Margin="26,18,26,205">
+                        <Label>Working Directory:</Label>
+                        <TextBox IsReadOnly="True" Name="txt_working_directory" TextWrapping="Wrap" Text="Choose a directory from your drive.." Width="Auto" MouseDoubleClick="txt_working_directory_Click"/>
+                        <Label>Path to PBO executable:</Label>
+                        <TextBox IsReadOnly="True" Name="txt_pbo_path" TextWrapping="Wrap" Text="Choose a file from your drive.." Width="Auto" MouseDoubleClick="txt_pbo_path_Click"/>
+                    </StackPanel>
+                    <Label Content="Notify me:" HorizontalAlignment="Left" Margin="27,112,0,0" VerticalAlignment="Top"/>
+                    <CheckBox Name="cb_notify_blaze" Content="On Blaze Radar popup" HorizontalAlignment="Left" Margin="32,143,0,0" VerticalAlignment="Top" Unchecked="cb_notify_blaze_Change" Checked="cb_notify_blaze_Change"/>
+                    <CheckBox Name="cb_notify_offline" Content="On disconnect from server" HorizontalAlignment="Left" Margin="32,163,0,0" VerticalAlignment="Top" Unchecked="cb_notify_offline_Change" Checked="cb_notify_offline_Change"/>
+                    <CheckBox Name="cb_notify_friend" Content="On friend request" HorizontalAlignment="Left" Margin="233,163,0,0" VerticalAlignment="Top" Unchecked="cb_notify_friend_Change" Checked="cb_notify_friend_Change"/>
+                    <CheckBox Name="cb_notify_whisper" Content="On whisper message" HorizontalAlignment="Left" Margin="233,143,0,0" VerticalAlignment="Top" Unchecked="cb_notify_whisper_Change" Checked="cb_notify_whisper_Change"/>
+                    <CheckBox Name="cb_notify_catch" Content="On catch attempt" HorizontalAlignment="Left" Margin="32,183,0,0" VerticalAlignment="Top" Unchecked="cb_notify_catch_Change" Checked="cb_notify_catch_Change"/>
+                    <CheckBox Name="cb_notify_admin" Content="On admin pin solver" HorizontalAlignment="Left" Margin="233,183,0,0" VerticalAlignment="Top" Unchecked="cb_notify_admin_Change" Checked="cb_notify_admin_Change"/>
+                    <CheckBox Name="cb_notify_anonym" Content="Remain anonymous" HorizontalAlignment="Left" Margin="96,118,0,0" VerticalAlignment="Top" Unchecked="cb_notify_anonym_Change" Checked="cb_notify_anonym_Change"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="27,213,0,0" TextWrapping="Wrap" Text="We notify you on our Discord Server with a tagged message in the Botette notification channel" VerticalAlignment="Top"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="27,231,0,0" TextWrapping="Wrap" Text="In order to @ you we need your User Id:" VerticalAlignment="Top"/>
+                    <TextBox Name="txt_discord_userId" HorizontalAlignment="Left" Margin="244,231,0,0" TextWrapping="Wrap" Text="237542420085080065" VerticalAlignment="Top" Width="130" TextChanged="txt_discord_userId_TextChanged"/>
+                    <Button Name="bttn_join_discord" Content="Join Discord" HorizontalAlignment="Left" Margin="34,252,0,0" VerticalAlignment="Top" Height="34" Width="105" Click="bttn_join_discord_Click"/>
+                    <Label Content="Refresh rate:" HorizontalAlignment="Left" Margin="491,113,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Chat:" HorizontalAlignment="Left" Margin="491,138,0,0" VerticalAlignment="Top"/>
+                    <Slider Name="sl_tick_chatter" Minimum="1" Maximum="10" Value="10" SmallChange="1" ToolTip="Rate at which the screen check is done in seconds" IsSnapToTickEnabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119" Margin="543,143,0,0" ValueChanged="sl_tick_chatter_ValueChanged" />
+                    <Label Content="Popup:" HorizontalAlignment="Left" Margin="491,173,0,0" VerticalAlignment="Top"/>
+                    <Slider x:Name="sl_tick_watcher" Minimum="1" Maximum="10" Value="5" SmallChange="1" ToolTip="Rate at which the screen check is done in seconds" IsSnapToTickEnabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="119" Margin="543,178,0,0" ValueChanged="sl_tick_watcher_ValueChanged" />
+                    <Label Content="1" HorizontalAlignment="Left" Margin="542,192,0,0" VerticalAlignment="Top"/>
+                    <Label Content="10" HorizontalAlignment="Left" Margin="646,192,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="cb_notify_ball" Content="On ball count" HorizontalAlignment="Left" Margin="389,144,0,0" VerticalAlignment="Top" Unchecked="cb_notify_ball_Change" Checked="cb_notify_ball_Change"/>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

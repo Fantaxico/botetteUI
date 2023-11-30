@@ -1,12 +1,7 @@
-﻿using BotetteUI.Helper;
-using BotetteUI.IO;
+﻿using BotetteUI.IO;
+using BotetteUI.Models.Stucts;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Markup;
 
 namespace BotetteUI.Models
 {
@@ -19,10 +14,26 @@ namespace BotetteUI.Models
         public int RunningRandomness { get; set; }
         public bool HuntingMode { get; set; }
         public bool FleeFromFights { get; set; }
+        public Notifications UserNotifications { get; set; }
+        public string DiscordUserId { get; set; }
         public bool Debug { get; set; }
+        public int TickChatter { get; set; }
+        public int TickWatcher { get; set; }
 
         [JsonConstructor]
-        public Config(List<Target> targets, string move, string runningDirection, bool invertRunning, int runningRandomness, bool hunt, bool fleeFromFights, bool debug)
+        public Config(
+            List<Target> targets,
+            string move,
+            string runningDirection,
+            bool invertRunning,
+            int runningRandomness,
+            bool hunt,
+            bool fleeFromFights,
+            Notifications notifications,
+            string discordId,
+            bool debug,
+            int tickChatter,
+            int tickWatcher)
         {
             Targets = targets;
             MoveToUse = move;
@@ -31,19 +42,27 @@ namespace BotetteUI.Models
             RunningRandomness = runningRandomness;
             HuntingMode = hunt;
             FleeFromFights = fleeFromFights;
+            UserNotifications = notifications;
+            DiscordUserId = discordId;
             Debug = debug;
+            TickChatter = tickChatter;
+            TickWatcher = tickWatcher;
         }
 
         public Config()
         {
             Targets = new List<Target>();
-            MoveToUse = string.Empty;
+            MoveToUse = "1";
             RunningDirection = "Left/Right";
             RunningInvert = false;
             RunningRandomness = 3;
             HuntingMode = true;
             FleeFromFights = false;
+            UserNotifications = new Notifications();
+            DiscordUserId = string.Empty;
             Debug = false;
+            TickChatter = 10;
+            TickWatcher = 6;
         }
     }
 }

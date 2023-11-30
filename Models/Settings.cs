@@ -1,28 +1,26 @@
 ﻿using BotetteUI.IO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BotetteUI.Models
 {
     public class Settings : Jsonable<Settings>
     {
+        public int FirstStartup { get; set; }
         public string WorkingDirectory { get; set; }
         public string PBOPath { get; set; }
 
         [JsonConstructor]
-        public Settings(string workingDirectory, string pBOPath)
+        public Settings(int firstStart,string workingDirectory, string pBOPath)
         {
+            FirstStartup = firstStart;
             WorkingDirectory = workingDirectory;
             PBOPath = pBOPath;
         }
 
-        public Settings(string workingDirectory)
+        public Settings()
         {
-            WorkingDirectory = workingDirectory;
+            FirstStartup = 1;
+            WorkingDirectory = string.Empty;
             PBOPath = string.Empty;
         }
     }

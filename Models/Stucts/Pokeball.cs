@@ -1,12 +1,6 @@
-﻿using Microsoft.VisualBasic.ApplicationServices;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
-namespace BotetteUI.Models
+namespace BotetteUI.Models.Stucts
 {
     public enum POKEBALLS : int
     {
@@ -24,13 +18,13 @@ namespace BotetteUI.Models
         [JsonConstructor]
         public Pokeball(string name)
         {
-            this.Name = name;
-            this.ImagePath = $"Assets/{name.ToLower()}.png";
+            Name = name;
+            ImagePath = $"Assets/{name.ToLower()}.png";
         }
         public Pokeball(string name, string imagepath)
         {
-            this.Name = name;
-            this.ImagePath = imagepath;
+            Name = name;
+            ImagePath = imagepath;
         }
 
     }
