@@ -375,7 +375,7 @@ namespace BotetteUI
 
         private void bttn_join_discord_Click(object sender, RoutedEventArgs e)
         {
-            string discordInviteLink = "https://discord.gg/vZEtyCnHtf";
+            string discordInviteLink = "https://discord.gg/umuMc2au4t";
 
             Process.Start(new ProcessStartInfo
             {
