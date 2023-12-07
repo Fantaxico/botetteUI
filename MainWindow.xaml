@@ -68,7 +68,7 @@
                     <CheckBox Name="cb_run" IsChecked="False" Content="Flee instead of fighting" ToolTip="Flees from encounters instead of fighting them (might be faster)" HorizontalAlignment="Left" Margin="39,198,0,0" VerticalAlignment="Top" Unchecked="cb_run_Change" Checked="cb_run_Change"/>
 
                     <!-- Running -->
-                    <Slider Name="sl_randomness" Minimum="1" Maximum="5" Value="3" SmallChange="1" ToolTip="10%-50% chance to skip the next step (Anti sus)" IsSnapToTickEnabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="108" Margin="137,105,0,0" ValueChanged="sl_randomness_ValueChanged" />
+                    <Slider Name="sl_randomness" Minimum="5" Maximum="9" Value="6" SmallChange="1" ToolTip="50%-90% chance to skip the next step (Anti sus movement)" IsSnapToTickEnabled="True" HorizontalAlignment="Left" VerticalAlignment="Top" Width="108" Margin="137,105,0,0" ValueChanged="sl_randomness_ValueChanged" />
                     <CheckBox Name="cb_invert" IsChecked="False" Content="Invert" ToolTip="Inverts the current selected directions (Left/Right -> Right/Left)" HorizontalAlignment="Left" Margin="141,81,0,0" VerticalAlignment="Top" Unchecked="cb_invert_Change" Checked="cb_invert_Change"/>
                     <ComboBox Name="cbx_run_directions" HorizontalAlignment="Left" Margin="141,50,0,0" VerticalAlignment="Top" Width="104" SelectionChanged="cbx_run_directions_SelectionChanged"/>
 
@@ -78,8 +78,8 @@
                     <Button Name="bttn_game_start" Content="START GAME" HorizontalAlignment="Left" Margin="34,286,0,0" VerticalAlignment="Top" Height="34" Width="105" Click="bttn_game_start_Click"/>
                     <Label Content="Running direction:" HorizontalAlignment="Left" Margin="26,48,0,0" VerticalAlignment="Top"/>
                     <Label Content="Skip next step %:" ToolTip="10%-50% chance to skip the next step (Anti sus)" HorizontalAlignment="Left" Margin="28,101,0,0" VerticalAlignment="Top"/>
-                    <Label Content="10" HorizontalAlignment="Left" Margin="136,118,0,0" VerticalAlignment="Top"/>
-                    <Label Content="50" HorizontalAlignment="Left" Margin="221,118,0,0" VerticalAlignment="Top"/>
+                    <Label Content="50" HorizontalAlignment="Left" Margin="136,118,0,0" VerticalAlignment="Top"/>
+                    <Label Content="90" HorizontalAlignment="Left" Margin="221,118,0,0" VerticalAlignment="Top"/>
                     <Label Content="Quick access" FontWeight="Bold" HorizontalAlignment="Left" Margin="29,141,0,0" VerticalAlignment="Top"/>
                     <Rectangle HorizontalAlignment="Left" Height="102" Margin="34,167,0,0" Stroke="Black" VerticalAlignment="Top" Width="188"/>
                 </Grid>
